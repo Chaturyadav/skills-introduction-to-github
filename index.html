@@ -102,9 +102,12 @@
 
         // Add touch support for mobile devices
         document.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            updateBackground(touch);
-        });
+            if (e.touches.length > 0) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                updateBackground(touch);
+            }
+        }, { passive: false });
 
         // Set initial background
         body.style.background = 'rgb(128, 128, 128)';
