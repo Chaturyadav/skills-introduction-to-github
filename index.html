@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pointer Background Effect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .coordinates {
+            margin-top: 20px;
+            font-size: 1em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Pointer Background Effect</h1>
+        <p>Move your mouse around to see the magic!</p>
+        <div class="coordinates">
+            <p id="coords">X: 0, Y: 0</p>
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const coordsDisplay = document.getElementById('coords');
+
+        // Function to map mouse position to color
+        function updateBackground(e) {
+            // Get mouse position relative to viewport
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Get viewport dimensions
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // Calculate color values based on position
+            // X position controls red (0-255)
+            const red = Math.round((x / width) * 255);
+            
+            // Y position controls blue (0-255)
+            const blue = Math.round((y / height) * 255);
+            
+            // Green is based on distance from center
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const distanceFromCenter = Math.sqrt(
+                Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)
+            );
+            const maxDistance = Math.sqrt(
+                Math.pow(centerX, 2) + Math.pow(centerY, 2)
+            );
+            const green = Math.round((distanceFromCenter / maxDistance) * 255);
+            
+            // Apply the background color
+            body.style.background = `rgb(${red}, ${green}, ${blue})`;
+            
+            // Update coordinates display
+            coordsDisplay.textContent = `X: ${x}, Y: ${y} | RGB(${red}, ${green}, ${blue})`;
+        }
+
+        // Add event listener for mouse movement
+        document.addEventListener('mousemove', updateBackground);
+
+        // Add touch support for mobile devices
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            updateBackground(touch);
+        });
+
+        // Set initial background
+        body.style.background = 'rgb(128, 128, 128)';
+    </script>
+</body>
+</html>
